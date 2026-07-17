@@ -1,0 +1,4 @@
+- name: Baseline playbook to setup homelab hosts
+  hosts: [homelab]
+  roles: 
+    - common

@@ -1,0 +1,20 @@
+---
+# vars file for roles/common
+ntp_service_name: "{{ 'chronyd' if ansible_facts['os_family'] == 'RedHat' else 'chrony' }}"
+admin_group: "{{ 'wheel' if ansible_facts['os_family'] == 'RedHat' else 'sudo' }}"
+common_packages_base:
+  - curl
+  - vim
+  - htop
+  - chrony
+  - git
+
+common_packages_family:
+  Debian:
+    - iproute2
+    - ufw
+  RedHat:
+    - iproute
+    - firewalld
+
+common_packages: "{{ common_packages_base + common_packages_family[ansible_facts['os_family']] }}"
