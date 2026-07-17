@@ -1,0 +1,46 @@
+---
+# tasks file for roles/common
+- name: Ensure ansible user exists with sudo privileges and SSH key
+  become: yes
+  tags: admin
+  ansible.builtin.user:
+    name: "ansible"
+    append: true
+    groups: "{{ admin_group }}"
+
+- name: Add authorized ssh key to each host
+  become: yes
+  tags: admin
+  ansible.posix.authorized_key:
+    user: "ansible"
+    key: "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAICVMZumShhypLBy51vs1B0ttEtk9JPB6QGYpPrbWYETv admin@ansible"
+
+- name: Update apt cache (Debian family)
+  become: yes
+  tags: packages
+  ansible.builtin.apt:
+    update_cache: true
+    cache_valid_time: 3600
+  when: ansible_facts['os_family'] == 'Debian'
+      
+- name: Update and Install essential packages
+  become: yes
+  tags: packages
+  ansible.builtin.package:
+    name: "{{ item }}"
+    state: present
+  loop: "{{ common_packages }}"
+
+- name: Configure chrony for time sync
+  become: yes
+  tags: ntp
+  ansible.builtin.service:
+    name: "{{ ntp_service_name }}"
+    enabled: yes
+    state: started
+
+- name: Set proper hostname for each host
+  become: yes
+  tags: hostname
+  ansible.builtin.hostname:
+    name: "{{ inventory_hostname }}"
