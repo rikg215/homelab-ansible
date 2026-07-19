@@ -2,7 +2,7 @@
 
 ## Purpose:
 
-This is a repo dedicated to my ansible configuration management for my homelab. 30 hosts (LXCs, VMs, k8s nodes) on Proxmox, managed from a dedicated control node."
+This is a repo dedicated to my ansible configuration management for my homelab. 30 hosts (LXCs, VMs, k8s nodes) on Proxmox, managed from a dedicated control node.
 
 ## Inventory Layout
 
@@ -14,8 +14,8 @@ Dedicated ansible user on every host via SSH key auth no password. Passwordless 
 
 ## How to run
 
-ansible-playbook site.yml --limit <group>. List all available --limit tagets: automation, invidividual groups like k8s_cluster or tools, or homelab for the full fleet. Use --check or --diff for dry runs. 
+ansible-playbook site.yml --limit <group>. List all available --limit targets: automation, individual groups like k8s_cluster or tools, or homelab for the full fleet. Use --check or --diff for dry runs. 
 
 ## Managed vs excluded
 
-Common role handles: Packages, NTP, hostname assignment, admin user. Hardening handles: ssh, sysctl, firewall, and autoupdates. This repo witll NOT manage app configs, docker containers, or k8s manifests.
+Common role handles: Packages, NTP, hostname assignment, admin user. Hardening handles: ssh, sysctl, firewall, and autoupdates. This repo will NOT manage app configs, docker containers, or k8s manifests.

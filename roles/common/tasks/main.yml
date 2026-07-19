@@ -15,6 +15,14 @@
     user: "ansible"
     key: "{{ ansible_user_ssh_key }}"
 
+- name: Install EPEL repo (RedHat family)
+  become: yes
+  tags: packages
+  ansible.builtin.package:
+    name: epel-release
+    state: present
+  when: ansible_facts['os_family'] == 'RedHat'  
+      
 - name: Update apt cache (Debian family)
   become: yes
   tags: packages
@@ -27,9 +35,8 @@
   become: yes
   tags: packages
   ansible.builtin.package:
-    name: "{{ item }}"
+    name: "{{ common_packages }}"
     state: present
-  loop: "{{ common_packages }}"
 
 - name: Configure chrony for time sync
   become: yes
@@ -38,6 +45,7 @@
     name: "{{ ntp_service_name }}"
     enabled: yes
     state: started
+  when: ansible_facts['virtualization_type'] != 'lxc'
 
 - name: Set proper hostname for each host
   become: yes
@@ -49,7 +57,7 @@
   become: yes
   tags: admin
   ansible.builtin.copy:
-    content: "ansible ALL=(ALL) NOPASSWD: ALL"
-    dest: /etc/sudoers.d/20-anisble-user
+    content: "ansible ALL=(ALL) NOPASSWD: ALL\n"
+    dest: /etc/sudoers.d/20-ansible-user
     validate: visudo -cf %s
 
