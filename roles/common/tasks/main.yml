@@ -13,7 +13,7 @@
   tags: admin
   ansible.posix.authorized_key:
     user: "ansible"
-    key: "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAICVMZumShhypLBy51vs1B0ttEtk9JPB6QGYpPrbWYETv admin@ansible"
+    key: "{{ ansible_user_ssh_key }}"
 
 - name: Update apt cache (Debian family)
   become: yes
@@ -44,3 +44,12 @@
   tags: hostname
   ansible.builtin.hostname:
     name: "{{ inventory_hostname }}"
+
+- name: Set passwordless sudo for ansible user
+  become: yes
+  tags: admin
+  ansible.builtin.copy:
+    content: "ansible ALL=(ALL) NOPASSWD: ALL"
+    dest: /etc/sudoers.d/20-anisble-user
+    validate: visudo -cf %s
+
