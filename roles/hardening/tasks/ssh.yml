@@ -1,0 +1,28 @@
+---
+#=-=-=-=-=-=-=-=-=-=-=--=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=#
+#-------------------------------------Hardening for SSH----------------------------------#
+#=-=-=-=-=-=-=-=-=-=-=--=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=#
+- name: Hardening sshd configuration via drop in file template
+  hosts: automation                           # will widen scope after confirmation that this works: services -> k8s_all -> hypervisor -> homelab
+  tasks:
+  - name: Assert to make sure that hardening_desktop_user is set
+    ansible.builtin.assert:
+      that: "{{ hardening_desktop_user }}" == "admin"
+
+  - name: Validation that directory exists with right permissions and creating it if it doesn't
+    ansible.builtin.file:
+      path: /etc/ssh/sshd_config.d/
+      state: directory
+      mode: 0755
+
+  - name: The copying of template file 
+    ansible.builtin.template:
+      src:  templates/99-hardening-ssh.conf.j2
+      dest: /etc/ssh/sshd_config.d/99-hardening-ssh.conf
+      validate: '/usr/sbin/sshd -t -f %s'
+    notify: restart sshd
+
+  - name: Verification that sshd config works
+    ansible.builtin.command:
+      cmd: 'sshd -t'
+      changed_when: false
