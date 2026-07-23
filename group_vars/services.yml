@@ -1,0 +1,5 @@
+#=-=-=-=-=-=-=-=-=-=-=--=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=#
+#-----------------------------------Overrides for Services-------------------------------#
+#=-=-=-=-=-=-=-=-=-=-=--=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=#
+hardening_firewall_enabled: true
+hardening_allowed_tcp_ports: [80, 443, 3000]                  # Needs to be adjusted according to actual service requirements

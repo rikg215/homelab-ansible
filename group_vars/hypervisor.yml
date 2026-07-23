@@ -1,0 +1,5 @@
+#=-=-=-=-=-=-=-=-=-=-=--=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=#
+#-----------------------------------Overrides for Hypervisor-----------------------------#
+#=-=-=-=-=-=-=-=-=-=-=--=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=#
+hardening_firewall_enabled: false                  # Proxmox has its own firewall + vmbr bridges; No touchy
+hardening_autoupdate_apply: false                  # hypervisor updates are manual, deliberate events
