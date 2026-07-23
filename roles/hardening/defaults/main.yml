@@ -1,2 +1,45 @@
 ---
 # defaults file for roles/hardening
+
+
+
+
+#=-=-=-=-=-=-=-=-=-=-=--=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=#
+#------------------------------------------SSH-------------------------------------------#
+#=-=-=-=-=-=-=-=-=-=-=--=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=#
+hardening_ssh_allow_users:
+  - ansible
+  - "{{ hardening_desktop_user }}"             # Allowing access for my desktop and ansible control vm. To be defined in group_vars/all.yml
+
+hardening_ssh_max_auth_tries: 3
+hardening_ssh_client_alive_interval: 300
+
+
+#=-=-=-=-=-=-=-=-=-=-=--=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=#
+#-----------------------------------------SYSCTL-----------------------------------------#
+#=-=-=-=-=-=-=-=-=-=-=--=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=#
+hardening_ip_forward: 0                       # k8s group override to 1
+hardening_rp_filter: 1                        # k8s group override to 0 or 2 per CNI
+hardening_sysctl_extra: {}                    # Per-group additions
+
+
+#=-=-=-=-=-=-=-=-=-=-=--=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=#
+#----------------------------------------FIREWALL----------------------------------------#
+#=-=-=-=-=-=-=-=-=-=-=--=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=#
+hardening_firewall_enabled: false             # opt-in per group deliberate default
+hardening_mgmt_subnet: "192.168.0.0/24"
+hardening_allowed_tcp_ports: []               # per-group service ports
+hardening_allowed_udp_ports: []
+
+
+#=-=-=-=-=-=-=-=-=-=-=--=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=#
+#--------------------------------------AUTOUPDATES---------------------------------------#
+#=-=-=-=-=-=-=-=-=-=-=--=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=#
+hardening_autoupdate_apply: true              # k8s group override to false (download-only)
+hardening_autoupdate_reboot: false            # never true, anywhere
+hardening_dnf_exclude: ""                     # k8s groups: "kubelet,kubeadm,kubectl,containerd*,cri-tools"
+
+
+#=-=-=-=-=-=-=-=-=-=-=--=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=#
+#                                                                                        #
+#=-=-=-=-=-=-=-=-=-=-=--=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=#

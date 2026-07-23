@@ -1,8 +1,9 @@
 # Managed by Ansible - hardening role
 PermitRootLogin no
 PasswordAuthentication no
+KbdInteractiveAuthentication no
 X11Forwarding no
-MaxAuthTries 3
-ClientAliveInterval 300
+MaxAuthTries {{ hardening_ssh_max_auth_tries }}
+ClientAliveInterval {{ hardening_ssh_client_alive_interval }}
 ClientAliveCountMax 2
-AllowUsers ansible
+AllowUsers {{ hardening_ssh_allow_users | join(' ') }}
