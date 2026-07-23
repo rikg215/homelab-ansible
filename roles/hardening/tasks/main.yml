@@ -1,31 +1,15 @@
 ---
 #=-=-=-=-=-=-=-=-=-=-=--=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=#
-#-----------------------------------Main Hardening for SSH-------------------------------#
+#---------------------------------------Main task import---------------------------------#
 #=-=-=-=-=-=-=-=-=-=-=--=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=#
-- name: Hardening sshd configuration via drop in file template
-  hosts: automation                           # will widen scope after confirmation that this works: services -> k8s_all -> hypervisor -> homelab
-  tasks:
-  - name: Validation that directory exists with right permissions and creating it if it doesn't
-    ansible.builtin.file:
-      path: /etc/ssh/sshd_config.d/
-      state: directory
-      mode: 0755
+- import_tasks: ssh.yml
+  tags: [ssh]
 
+- import_tasks: sysctl.yml
+  tags: [sysctl]
 
-  - name: The copying of template file 
-    ansible.builtin.template:
-      src:  templates/99-hardening-ssh.conf.j2
-      dest: /etc/ssh/sshd_config.d/99-hardening-ssh.conf
-      validate: '/usr/sbin/sshd -t -f %s'
+- import_tasks: firewall.yml
+  tags: [firewall]
 
-  - name: Verification that sshd config works
-    anisble.builtin.command:
-      cmd: 'sshd -t'
-      changed_when: false
-    notify: restart sshd
-  
-  handlers:
-  - name: restart sshd
-      service:
-        name: sshd
-        state: restarted
+- import_tasks: autoupdates.yml
+  tags: [autoupdates]
