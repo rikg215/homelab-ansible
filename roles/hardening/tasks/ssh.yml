@@ -2,12 +2,11 @@
 #=-=-=-=-=-=-=-=-=-=-=--=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=#
 #-------------------------------------Hardening for SSH----------------------------------#
 #=-=-=-=-=-=-=-=-=-=-=--=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=#
-- name: Hardening sshd configuration via drop in file template
-  hosts: automation                           # will widen scope after confirmation that this works: services -> k8s_all -> hypervisor -> homelab
-  tasks:
   - name: Assert to make sure that hardening_desktop_user is set
     ansible.builtin.assert:
-      that: "{{ hardening_desktop_user }}" == "admin"
+      that: 
+      - hardening_desktop_user is defined
+      - hardening_desktop_user | length > 0
 
   - name: Validation that directory exists with right permissions and creating it if it doesn't
     ansible.builtin.file:
