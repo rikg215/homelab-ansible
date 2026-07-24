@@ -21,6 +21,16 @@ hardening_ssh_client_alive_interval: 300
 hardening_ip_forward: 0                       # k8s group override to 1
 hardening_rp_filter: 1                        # k8s group override to 0 or 2 per CNI
 hardening_sysctl_extra: {}                    # Per-group additions
+hardening_sysctl_baseline:
+  net.ipv4.tcp_syncookies: 1
+  net.ipv4.ip_forward: "{{ hardening_ip_forward }}"
+  net.ipv4.conf.all.accept_source_route: 0
+  net.ipv4.conf.all.accept_redirects: 0
+  net.ipv4.conf.all.send_redirects: 0
+  net.ipv4.conf.all.rp_filter: "{{ hardening_rp_filter }}"
+  net.ipv4.icmp_echo_ignore_broadcasts: 1
+  kernel.dmesg_restrict: 1
+  kernel.kptr_restrict: 2
 
 
 #=-=-=-=-=-=-=-=-=-=-=--=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=#
