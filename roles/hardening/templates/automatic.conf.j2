@@ -1,0 +1,8 @@
+# Managed by Ansible — hardening role
+[commands]
+apply_updates = {{ 'yes' if hardening_autoupdate_apply else 'no' }}
+download_updates = yes
+upgrade_type = security
+
+[base]
+exclude = {{ hardening_dnf_exclude }}

@@ -2,3 +2,37 @@
 #=-=-=-=-=-=-=-=-=-=-=--=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=#
 #---------------------------------Hardening via Autoupdates------------------------------#
 #=-=-=-=-=-=-=-=-=-=-=--=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=#
+- name: Installing auto-update package
+  ansible.builtin.package:
+    name: "{{ 'dnf-automatic' if ansible_facts['os_family'] == 'RedHat' else 'unattended-upgrades' }}"
+    state: present
+  become: true
+
+- name: Configure dnf-automatic
+  ansible.builtin.template:
+    src: automatic.conf.j2
+    dest: /etc/dnf/automatic.conf
+  become: true
+  when: ansible_facts['os_family'] == 'RedHat'
+
+- name: Enable and start dnf-automatic timer
+  ansible.builtin.service:
+    name: dnf-automatic.timer
+    state: started
+    enabled: true
+  become: true
+  when: ansible_facts['os_family'] == 'RedHat'
+
+- name: Configure unattended-upgrades policy
+  ansible.builtin.template:
+    src: 50unattended-upgrades.j2
+    dest: /etc/apt/apt.conf.d/50unattended-upgrades
+  become: true
+  when: ansible_facts['os_family'] == 'Debian'
+
+- name: Enable periodic apt upgrade runs
+  ansible.builtin.template:
+    src: 20auto-upgrades.conf.j2
+    dest: /etc/apt/apt.conf.d/20auto-upgrades
+  become: true
+  when: ansible_facts['os_family'] == 'Debian'

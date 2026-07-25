@@ -13,4 +13,5 @@
   when: hardening_firewall_enabled | bool
 
 - import_tasks: autoupdates.yml
+  when: hardening_autoupdate_apply | bool or os_family == 'RedHat'
   tags: [autoupdates]

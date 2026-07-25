@@ -1,0 +1,11 @@
+// Managed by Ansible — hardening role
+Unattended-Upgrade::Origins-Pattern {
+{% if ansible_facts['distribution'] == 'Ubuntu' %}
+        "origin=Ubuntu,archive=${distro_codename}-security";
+{% else %}
+        "origin=Debian,codename=${distro_codename}-security,label=Debian-Security";
+{% endif %}
+};
+
+Unattended-Upgrade::Automatic-Reboot "false";
+Unattended-Upgrade::Remove-Unused-Dependencies "true";
