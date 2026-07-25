@@ -1,0 +1,2 @@
+---
+hardening_allowed_tcp_ports: [8989]

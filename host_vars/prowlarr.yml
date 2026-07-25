@@ -1,0 +1,4 @@
+---
+# 8191 (FlareSolverr) intentionally NOT allowed — localhost-only consumer.
+# Verify Prowlarr's FlareSolverr URL is http://localhost:8191 before firewall run.
+hardening_allowed_tcp_ports: [9696]

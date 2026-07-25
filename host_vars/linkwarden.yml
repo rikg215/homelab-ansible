@@ -1,0 +1,4 @@
+---
+# Dual listeners found in audit: apache2 :80 (proxy?) + next-server :3000.
+# TODO: confirm which one the k8s ingress backend targets, then remove the other.
+hardening_allowed_tcp_ports: [80, 3000]

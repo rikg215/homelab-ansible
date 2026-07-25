@@ -1,0 +1,3 @@
+---
+hardening_allowed_tcp_ports: [8096]
+hardening_allowed_udp_ports: [7359]    # client auto-discovery

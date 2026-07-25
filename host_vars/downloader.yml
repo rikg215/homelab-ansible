@@ -1,0 +1,4 @@
+---
+# rpcbind :111 intentionally NOT allowed — pending NFS version check.
+# nfsstat -m must show vers=4.x before firewall run; v3 needs callback ports.
+hardening_allowed_tcp_ports: [8887]    # docker-proxy

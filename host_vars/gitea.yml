@@ -1,0 +1,8 @@
+---
+hardening_allowed_tcp_ports: [3000]
+# git-over-SSH goes through system sshd as the 'git' user;
+# without this, sshd AllowUsers blocks all SSH clones.
+hardening_ssh_allow_users:
+  - ansible
+  - "{{ hardening_desktop_user }}"
+  - git
