@@ -51,7 +51,7 @@
   become: yes
   tags: hostname
   ansible.builtin.hostname:
-    name: "{{ inventory_hostname }}"
+    name: "{{ system_hostname | default(inventory_hostname) }}"
 
 - name: Set passwordless sudo for ansible user
   become: yes

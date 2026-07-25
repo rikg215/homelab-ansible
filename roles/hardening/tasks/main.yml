@@ -10,6 +10,7 @@
 
 - import_tasks: firewall.yml
   tags: [firewall]
+  when: hardening_firewall_enabled | bool
 
 - import_tasks: autoupdates.yml
   tags: [autoupdates]

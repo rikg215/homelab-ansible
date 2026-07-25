@@ -1,0 +1,85 @@
+---
+#=-=-=-=-=-=-=-=-=-=-=--=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=#
+#-------------------------------------Hardening for Firewall-----------------------------#
+#=-=-=-=-=-=-=-=-=-=-=--=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=#
+- name: Allow ssh for UFW
+  community.general.ufw:
+    rule: allow
+    port: ssh
+    proto: tcp
+    src: '{{ hardening_mgmt_subnet }}'
+  when: ansible_facts['os_family'] == 'Debian'
+  become: true
+
+- name: Firewall Default policies for UFW
+  community.general.ufw:
+    policy: '{{ item.policy }}'
+    direction: '{{ item.direction }}'
+  loop:
+  - { policy: deny, direction: incoming }
+  - { policy: allow, direction: outgoing }
+  when: ansible_facts['os_family'] == 'Debian'
+  become: true
+
+- name: Allow tcp ports for UFW
+  community.general.ufw:
+    rule: allow
+    port: '{{ item }}'
+    proto: tcp
+    src: '{{ hardening_mgmt_subnet }}'
+  loop: '{{ hardening_allowed_tcp_ports }}'
+  when: ansible_facts['os_family'] == 'Debian'
+  become: true
+
+- name: Allow udp ports for UFW
+  community.general.ufw:
+    rule: allow
+    port: '{{ item }}'
+    proto: udp
+    src: '{{ hardening_mgmt_subnet }}'
+  loop: '{{ hardening_allowed_udp_ports }}'
+  when: ansible_facts['os_family'] == 'Debian'
+  become: true
+
+- name: Firewall started and enabled on debian families
+  community.general.ufw:
+    state: enabled
+  when: ansible_facts['os_family'] == 'Debian'       
+  become: true
+
+- name: Firewall started and enabled on RedHat families
+  ansible.builtin.service:
+    name: 'firewalld'
+    state: started
+    enabled: true
+  when: ansible_facts['os_family'] == 'RedHat'
+  become: true
+
+- name: Allow ssh for firewalld
+  ansible.posix.firewalld:
+    state: enabled
+    rich_rule: 'rule family=ipv4 source address={{ hardening_mgmt_subnet }} port port=22 protocol=tcp accept'
+    immediate: true
+    permanent: true
+  when: ansible_facts['os_family'] == 'RedHat'
+  become: true
+
+- name: Allow tcp ports for firewalld
+  ansible.posix.firewalld:
+    state: enabled
+    rich_rule: 'rule family=ipv4 source address={{ hardening_mgmt_subnet }} port port={{ item }} protocol=tcp accept'
+    immediate: true
+    permanent: true
+  loop: '{{ hardening_allowed_tcp_ports }}'
+  when: ansible_facts['os_family'] == 'RedHat'
+  become: true
+
+- name: Allow udp ports for firewalld
+  ansible.posix.firewalld:
+    state: enabled
+    rich_rule: 'rule family=ipv4 source address={{ hardening_mgmt_subnet }} port port={{ item }} protocol=udp accept'
+    immediate: true
+    permanent: true
+  loop: '{{ hardening_allowed_udp_ports }}'
+  when: ansible_facts['os_family'] == 'RedHat'
+  become: true

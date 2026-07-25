@@ -1,5 +1,6 @@
 - name: Baseline playbook to setup homelab hosts
-  hosts: automation
+  hosts: homelab
   roles: 
     - common
     - hardening
+  become: true
