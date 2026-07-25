@@ -61,3 +61,19 @@
     dest: /etc/sudoers.d/20-ansible-user
     validate: visudo -cf %s
 
+- name: Deploy ssh banner
+  become: yes
+  tags: banner
+  ansible.builtin.template:
+    src: banner.j2
+    dest: /etc/ssh/banner
+  notify: restart sshd
+
+- name: Point sshd at banner
+  become: yes
+  tags: banner
+  ansible.builtin.template:
+    src: 10-custom.conf.j2
+    dest: /etc/ssh/sshd_config.d/10-custom.conf
+    validate: '/usr/sbin/sshd -t -f %s'
+  notify: restart sshd
