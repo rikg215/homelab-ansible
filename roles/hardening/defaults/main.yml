@@ -2,13 +2,12 @@
 # defaults file for roles/hardening
 
 
-
-
 #=-=-=-=-=-=-=-=-=-=-=--=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=#
 #------------------------------------------SSH-------------------------------------------#
 #=-=-=-=-=-=-=-=-=-=-=--=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=#
 hardening_ssh_allow_users:
   - ansible
+  - admin
   - "{{ hardening_desktop_user }}"             # Allowing access for my desktop and ansible control vm. To be defined in group_vars/all.yml
 
 hardening_ssh_max_auth_tries: 3
@@ -45,6 +44,7 @@ hardening_allowed_udp_ports: []
 #=-=-=-=-=-=-=-=-=-=-=--=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=#
 #--------------------------------------AUTOUPDATES---------------------------------------#
 #=-=-=-=-=-=-=-=-=-=-=--=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=#
+hardening_autoupdates_enabled: true           # role on/off switch
 hardening_autoupdate_apply: true              # k8s group override to false (download-only)
 hardening_autoupdate_reboot: false            # never true, anywhere
 hardening_dnf_exclude: ""                     # k8s groups: "kubelet,kubeadm,kubectl,containerd*,cri-tools"

@@ -2,16 +2,20 @@
 #=-=-=-=-=-=-=-=-=-=-=--=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=#
 #---------------------------------------Main task import---------------------------------#
 #=-=-=-=-=-=-=-=-=-=-=--=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=#
-- import_tasks: ssh.yml
+- name: Configure SSH hardening
+  import_tasks: ssh.yml
   tags: [ssh]
 
-- import_tasks: sysctl.yml
+- name: Apply sysctl hardening
+  import_tasks: sysctl.yml
   tags: [sysctl]
 
-- import_tasks: firewall.yml
+- name: Configure host firewall
+  import_tasks: firewall.yml
   tags: [firewall]
   when: hardening_firewall_enabled | bool
 
-- import_tasks: autoupdates.yml
-  when: hardening_autoupdate_apply | bool or os_family == 'RedHat'
+- name: Configure unattended upgrades
+  import_tasks: autoupdates.yml
+  when: hardening_autoupdates_enabled | bool
   tags: [autoupdates]

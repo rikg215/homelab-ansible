@@ -16,8 +16,8 @@
     policy: '{{ item.policy }}'
     direction: '{{ item.direction }}'
   loop:
-  - { policy: deny, direction: incoming }
-  - { policy: allow, direction: outgoing }
+    - {policy: deny, direction: incoming}
+    - {policy: allow, direction: outgoing}
   when: ansible_facts['os_family'] == 'Debian'
   become: true
 
@@ -44,7 +44,7 @@
 - name: Firewall started and enabled on debian families
   community.general.ufw:
     state: enabled
-  when: ansible_facts['os_family'] == 'Debian'       
+  when: ansible_facts['os_family'] == 'Debian'
   become: true
 
 - name: Firewall started and enabled on RedHat families

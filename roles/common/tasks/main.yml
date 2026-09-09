@@ -1,60 +1,60 @@
 ---
 # tasks file for roles/common
 - name: Ensure ansible user exists with sudo privileges and SSH key
-  become: yes
+  become: true
   tags: admin
   ansible.builtin.user:
     name: "ansible"
     append: true
-    groups: "{{ admin_group }}"
+    groups: "{{ common_admin_group }}"
 
 - name: Add authorized ssh key to each host
-  become: yes
+  become: true
   tags: admin
   ansible.posix.authorized_key:
     user: "ansible"
     key: "{{ ansible_user_ssh_key }}"
 
 - name: Install EPEL repo (RedHat family)
-  become: yes
+  become: true
   tags: packages
   ansible.builtin.package:
     name: epel-release
     state: present
-  when: ansible_facts['os_family'] == 'RedHat'  
-      
+  when: ansible_facts['os_family'] == 'RedHat'
+
 - name: Update apt cache (Debian family)
-  become: yes
+  become: true
   tags: packages
   ansible.builtin.apt:
     update_cache: true
     cache_valid_time: 3600
   when: ansible_facts['os_family'] == 'Debian'
-      
+
 - name: Update and Install essential packages
-  become: yes
+  become: true
   tags: packages
   ansible.builtin.package:
     name: "{{ common_packages }}"
     state: present
 
 - name: Configure chrony for time sync
-  become: yes
+  become: true
   tags: ntp
   ansible.builtin.service:
-    name: "{{ ntp_service_name }}"
-    enabled: yes
+    name: "{{ common_ntp_service_name }}"
+    enabled: true
     state: started
   when: ansible_facts['virtualization_type'] != 'lxc'
 
 - name: Set proper hostname for each host
-  become: yes
+  become: true
   tags: hostname
   ansible.builtin.hostname:
     name: "{{ system_hostname | default(inventory_hostname) }}"
 
 - name: Set passwordless sudo for ansible user
-  become: yes
+  become: true
   tags: admin
   ansible.builtin.copy:
     content: "ansible ALL=(ALL) NOPASSWD: ALL\n"
@@ -62,18 +62,18 @@
     validate: visudo -cf %s
 
 - name: Deploy ssh banner
-  become: yes
+  become: true
   tags: banner
   ansible.builtin.template:
     src: banner.j2
     dest: /etc/ssh/banner
-  notify: restart sshd
+  notify: Restart sshd
 
 - name: Point sshd at banner
-  become: yes
+  become: true
   tags: banner
   ansible.builtin.template:
     src: 10-custom.conf.j2
     dest: /etc/ssh/sshd_config.d/10-custom.conf
     validate: '/usr/sbin/sshd -t -f %s'
-  notify: restart sshd
+  notify: Restart sshd
