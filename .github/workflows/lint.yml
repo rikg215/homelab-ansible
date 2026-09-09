@@ -8,6 +8,9 @@ jobs:
     steps:
       - uses: actions/checkout@v5
 
+      - name: Create dummy vault password for syntax-check
+        run: echo "ci-dummy-not-a-real-password" > vault_pass.txt
+
       - uses: actions/setup-python@v6
         with:
           python-version: '3.12'
