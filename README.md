@@ -1,4 +1,5 @@
 # Homelab Ansible Configuration Repo
+![lint](https://github.com/rikg215/homelab-ansible/actions/workflows/lint.yml/badge.svg)
 
 ## Purpose:
 
