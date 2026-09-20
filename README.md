@@ -11,11 +11,11 @@ Inventory split into groups based on type as top level then function at a lower 
 
 ## Access model
 
-Dedicated ansible user on every host via SSH key auth no password. Passwordless sudo via drop in file /etc/sudoers.d/20-ansible-user. Bootstrap: first run uses -K with admin creds, every subsequent run uses ssh key auth with no need for a password.
+Dedicated ansible user on every host via SSH key auth no password. Passwordless sudo via drop in file /etc/sudoers.d/20-ansible-user. Bootstrap: first run uses `-K` with admin creds, every subsequent run uses ssh key auth with no need for a password.
 
 ## How to run
 
-ansible-playbook site.yml --limit <group>. List all available --limit targets: automation, individual groups like k8s_cluster or tools, or homelab for the full fleet. Use --check or --diff for dry runs. 
+ansible-playbook site.yml `--limit <group>`. List all available `--limit` targets: automation, individual groups like k8s_cluster or tools, or homelab for the full fleet. Use `--check` or `--diff` for dry runs. 
 
 ## Managed vs excluded
 
